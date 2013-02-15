@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:p="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd ">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>uk.ac.gcu.ebe</groupId>
+  <artifactId>legal-ontology-constructor</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Legal Ontology Constructor :: Core</name>
+  <description>A Framework for Regulatory Ontology Construction within AEC Domain.</description>
+  
+  <properties>
+    <tika.version>1.2</tika.version>
+    <any23.version>0.8.0-SNAPSHOT</any23.version>
+    <hadoop.version>1.1.1</hadoop.version>
+    <maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
+    <maven-clean-plugin.version>2.4.1</maven-clean-plugin.version>
+    <maven-jar-plugin.version>2.3.1</maven-jar-plugin.version>
+    <maven-install-plugin.version>2.3.1</maven-install-plugin.version>
+    <maven-assembly-plugin.version>2.3</maven-assembly-plugin.version>
+  </properties>
+  
+  <repositories>
+    <repository>
+      <id>any23-repository-external</id>
+      <url>http://svn.apache.org/repos/asf/any23/repo-ext/</url>
+    </repository>
+    
+    <repository>
+      <id>apache-snapshots</id>
+      <name>Official Apache Repository</name>
+      <url>http://repository.apache.org/content/groups/snapshots/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <!-- Any23 Dependencies -->
+    <dependency>
+      <groupId>org.apache.any23</groupId>
+      <artifactId>apache-any23-api</artifactId>
+      <version>${any23.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.any23</groupId>
+      <artifactId>apache-any23-core</artifactId>
+      <version>${any23.version}</version>
+    </dependency>
+    
+    <!-- Apache Tika Dependencies-->
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-parsers</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <version>${tika.version}</version>
+    </dependency>
+    
+    <!-- Hadoop Depedencies -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-core</artifactId>
+      <version>${hadoop.version}</version>
+    </dependency>
+    </dependencies>
+  
+  <build>
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <defaultGoal>package</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${maven-clean-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>${maven-install-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven-assembly-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>assembly</id>
+              <phase>package</phase>
+              <goals>
+                <goal>single</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <attach>true</attach>
+            <skipAssembly>${assembly.skip}</skipAssembly>
+            <tarLongFileMode>gnu</tarLongFileMode>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${javac.src.version}</source>
+          <target>${javac.target.version}</target>
+          <!-- includes>
+            <include>src/java/**/*.java</include>
+          </includes-->
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin.version}</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              <mainClass>uk.ac.gcu.ebe.legalontoconstruct.ConstructJob</mainClass>
+            </manifest>
+            <manifestEntries>
+              <Implementation-Build>${implementation.build}</Implementation-Build>
+              <Implementation-Build-Date>${maven.build.timestamp}</Implementation-Build-Date>
+              <X-Compile-Source-JDK>${javac.src.version}</X-Compile-Source-JDK>
+              <X-Compile-Target-JDK>${javac.target.version}</X-Compile-Target-JDK>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
