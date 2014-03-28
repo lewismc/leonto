@@ -22,11 +22,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import org.apache.any23.Any23;
+import org.apache.any23.ExtractionReport;
 import org.apache.any23.extractor.ExtractionException;
 import org.apache.any23.extractor.ExtractionParameters;
+import org.apache.any23.extractor.Extractor;
+import org.apache.any23.rdf.Prefixes;
 import org.apache.any23.source.DocumentSource;
+import org.apache.any23.validator.ValidationReport;
 import org.apache.any23.writer.JSONWriter;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
@@ -69,11 +74,43 @@ public class ConstructJob {
     DocumentSource source = runner.createDocumentSource("file:" + fileURIString);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     TripleHandler handler = new JSONWriter(baos);
-    final ExtractionParameters extractionParameters = ExtractionParameters.newDefault();
+    ExtractionParameters extractionParameters = ExtractionParameters.newDefault();
     extractionParameters.setFlag("any23.extraction.head.meta", true);
     try {
-      System.out.println("=== Starting Leonto extraction ===\n");
-      runner.extract(extractionParameters, source, handler);
+      System.out.println("Starting Leonto extraction... ");
+      ExtractionReport eReport = runner.extract(extractionParameters, source, handler);
+      System.out.println("=== REPORT ===");
+      System.out.print("Detected MIMEType: " + eReport.getDetectedMimeType());
+      System.out.print("\nDetected Encoding: " + eReport.getEncoding());
+      //System.out.print("Detected Encoding: " + eReport.getExtractorIssues(extractorName));
+      @SuppressWarnings("rawtypes")
+      List<Extractor> extractors = eReport.getMatchingExtractors();
+      if (extractors.isEmpty()) {
+        System.out.print("\nValid Extractors: None.");
+      } else {
+        System.out.print("\nValid Extractors: " + extractors.size());
+        for (org.apache.any23.extractor.Extractor<?> extractor : extractors) {
+          System.out.print("\n   " + extractor.getDescription().getExtractorName());
+          //try {
+          //  System.out.print("\n      label:" + extractor.getDescription().getExtractorLabel());
+          //} catch (NullPointerException e) {
+          //  System.out.print("\n      label: null" + e.getStackTrace());
+          //}
+          //Prefixes prefixes = extractor.getDescription().getPrefixes();
+        }
+      }
+
+      ValidationReport vReport = eReport.getValidationReport();
+      List<ValidationReport.Error> errors = vReport.getErrors();
+      if (errors.isEmpty()) {
+        System.out.print("\nValidation Errors: 0");
+      } else {
+        System.out.print("\nValidation Errors: " + errors.size());
+        for (org.apache.any23.validator.ValidationReport.Error error : errors) {
+          System.out.print(error.getMessage());
+        }
+      }
+      System.out.println("\n=== END REPORT ===");
     } catch (ExtractionException e) {
       e.printStackTrace();
     } finally {
@@ -84,7 +121,7 @@ public class ConstructJob {
       BufferedWriter bf = new BufferedWriter(new FileWriter("construct.txt"));
       bf.write(out);
       bf.close();
-      System.out.println("=== Finished Leonto extraction ===");
+      System.out.println("\nFinished Leonto extraction.");
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
