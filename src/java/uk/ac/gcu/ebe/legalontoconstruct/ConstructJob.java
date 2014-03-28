@@ -1,5 +1,18 @@
 /**
- * 
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package uk.ac.gcu.ebe.legalontoconstruct;
 
@@ -17,13 +30,18 @@ import org.apache.any23.source.DocumentSource;
 import org.apache.any23.writer.JSONWriter;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
-import org.dom4j.Branch;
 
 /**
- * <p>The main method in {@link ConstructJob} simply accepts one 'file' input 
- * parameter, from which we extract triples.</p>
+ * <p>The main method in {@link ConstructJob} accepts two input 
+ * parameters; namely '-file' and '/path/to/file'.</p>
  * <p>If the class is invoked without any parameters it will display a
- * useage message.</p>
+ * usage message.</p>
+ * <p>The extracted triples are written as a text file using a standard
+ * {@link java.io.FileWriter.FileWriter}. This file takes the form
+ * 'construct.txt' and is written to the top level directory of this
+ * project.</p>
+ * <p>Example files can be found in the <code>/resources</code> directory
+ * of the top level directory of this project.</p>
  * @author lewismc
  */
 public class ConstructJob {
@@ -63,7 +81,6 @@ public class ConstructJob {
     String out = baos.toString("UTF-8");
     try {
       BufferedWriter bf = new BufferedWriter(new FileWriter("construct.txt"));
-      System.out.println("Wrote file out.");
       bf.write(out);
       bf.close();
     } catch (IOException ioe) {
