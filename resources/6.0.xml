@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD08"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/CSD08 file:/home/mary/Downloads/akn/Release%2020140116/schema/akomantoso30.xsd">
+    <!-- This document is a manifestation of Section 6.0 of the Scottish 
+    Technical Standards 2010 for Domestic Construction. 
+    More details on Scottish Building Standards can be found at
+    http://www.scotland.gov.uk/Topics/Built-Environment/Building/Building-standards
+    -->
+    <act contains="singleVersion" age="">
+        <meta>
+            <identification source="#lewismc">
+                <FRBRWork>
+                    <FRBRthis value="/uk/scotland/subsidiary/2010-07-11/6/main/6.0"/>
+                    <FRBRuri value="/uk/scotland/subsidiary/2010-07-11/6/"/>
+                    <FRBRdate date="2010-07-11" name="Generation"/>
+                    <FRBRauthor href="#ScottishParliament" as="#author"/>
+                    <componentInfo></componentInfo>
+                    <FRBRcountry value="uk"/>
+                </FRBRWork>
+                <FRBRExpression>
+                    <FRBRthis value="/uk/scotland/subsidiary/2010-07-11/6/eng@/main/6.0"/>
+                    <FRBRuri value="/uk/scotland/subsidiary/2010-07-11/6/eng@/"/>
+                    <FRBRdate date="2010-07-11" name="Generation"/>
+                    <FRBRauthor href="#lewismc" as="#editor"/>
+                    <FRBRlanguage language="eng"/>
+                </FRBRExpression>
+                <FRBRManifestation>
+                    <FRBRthis value="/uk/scotland/subsidiary/2010-07-11/6/eng@/main/6.0.xml"/>
+                    <FRBRuri value="/uk/scotland/subsidiary/2010-07-11/6/eng@.akn"/>
+                    <FRBRdate date="2010-07-11" name="Generation"/>
+                    <FRBRauthor href="#lewismc" as="#editor"/>
+                </FRBRManifestation>
+            </identification>
+            <publication name="internal" date="2010-07-11" showAs="Internal Journal" number="999"/>
+            <classification source="eurovoc">
+                <keyword value="k1" showAs="Energy" dictionary="/environment/energy/"/>
+            </classification>
+            <lifecycle source="#lewismc">
+                <eventRef currentId="e1" date="2010-07-11" source="#ro1" type="generation"/>
+            </lifecycle>
+            <references source="#lewismc">
+                <original currentId="ro1" href="/uk/scotland/subsidiary/2010-07-11/46/eng@/main/6.0" showAs="Original"/>
+                <attachmentOf currentId="a2" href="/uk/scotland/subsidiary/2010-07-11/6/eng@/main" showAs="Energy"/>
+                <TLCPerson currentId="lewismc" href="http://people.apache.org/~lewismc" showAs="lewismc"/>
+                <TLCOrganization currentId="parliament" href="http://www.scottish.parliament.uk/‎" showAs="Parliament of Scotland"/>
+                <TLCRole currentId="editor" href="/ontology/role/editor" showAs="Editor"/>
+                <TLCRole currentId="author" href="/ontology/role/author" showAs="Author"/>
+            </references>
+        </meta>
+    </act>
+</akomaNtoso>

@@ -12,14 +12,12 @@ import java.net.URISyntaxException;
 
 import org.apache.any23.Any23;
 import org.apache.any23.extractor.ExtractionException;
+import org.apache.any23.extractor.ExtractionParameters;
 import org.apache.any23.source.DocumentSource;
 import org.apache.any23.writer.JSONWriter;
-import org.apache.any23.writer.NTriplesWriter;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
-
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import org.dom4j.Branch;
 
 /**
  * <p>The main method in {@link ConstructJob} simply accepts one 'file' input 
@@ -53,8 +51,10 @@ public class ConstructJob {
     DocumentSource source = runner.createDocumentSource("file:" + fileURIString);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     TripleHandler handler = new JSONWriter(baos);
+    final ExtractionParameters extractionParameters = ExtractionParameters.newDefault();
+    extractionParameters.setFlag("any23.extraction.head.meta", true);
     try {
-      runner.extract(source, handler);
+      runner.extract(extractionParameters, source, handler);
     } catch (ExtractionException e) {
       e.printStackTrace();
     } finally {
@@ -63,6 +63,7 @@ public class ConstructJob {
     String out = baos.toString("UTF-8");
     try {
       BufferedWriter bf = new BufferedWriter(new FileWriter("construct.txt"));
+      System.out.println("Wrote file out.");
       bf.write(out);
       bf.close();
     } catch (IOException ioe) {

@@ -14,6 +14,14 @@ construction of regulatory ontologies from complex legislative documentation
 specifically from within the AEC (architecture engineering and construction) 
 Domain.
 
+The /resources directory contains the entire Scottish Technical Standards 2010
+for Domestic Construction. From this material triples can be extracted
+and ontologies constructed.
+
+When you execute ConstructJob#run method the output file (containing triples) 
+will be written to the same directory as contains this file. It takes the name
+'construct.txt'. 
+
 This product includes software developed by The Apache Software
 Foundation (http://www.apache.org/).
 
