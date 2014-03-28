@@ -72,6 +72,7 @@ public class ConstructJob {
     final ExtractionParameters extractionParameters = ExtractionParameters.newDefault();
     extractionParameters.setFlag("any23.extraction.head.meta", true);
     try {
+      System.out.println("=== Starting Leonto extraction ===\n");
       runner.extract(extractionParameters, source, handler);
     } catch (ExtractionException e) {
       e.printStackTrace();
@@ -83,6 +84,7 @@ public class ConstructJob {
       BufferedWriter bf = new BufferedWriter(new FileWriter("construct.txt"));
       bf.write(out);
       bf.close();
+      System.out.println("=== Finished Leonto extraction ===");
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
