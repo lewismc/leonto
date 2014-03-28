@@ -29,7 +29,6 @@ import org.apache.any23.ExtractionReport;
 import org.apache.any23.extractor.ExtractionException;
 import org.apache.any23.extractor.ExtractionParameters;
 import org.apache.any23.extractor.Extractor;
-import org.apache.any23.rdf.Prefixes;
 import org.apache.any23.source.DocumentSource;
 import org.apache.any23.validator.ValidationReport;
 import org.apache.any23.writer.JSONWriter;
@@ -76,46 +75,18 @@ public class ConstructJob {
     TripleHandler handler = new JSONWriter(baos);
     ExtractionParameters extractionParameters = ExtractionParameters.newDefault();
     extractionParameters.setFlag("any23.extraction.head.meta", true);
+    ExtractionReport eReport = null;
     try {
       System.out.println("Starting Leonto extraction... ");
-      ExtractionReport eReport = runner.extract(extractionParameters, source, handler);
-      System.out.println("=== REPORT ===");
-      System.out.print("Detected MIMEType: " + eReport.getDetectedMimeType());
-      System.out.print("\nDetected Encoding: " + eReport.getEncoding());
-      //System.out.print("Detected Encoding: " + eReport.getExtractorIssues(extractorName));
-      @SuppressWarnings("rawtypes")
-      List<Extractor> extractors = eReport.getMatchingExtractors();
-      if (extractors.isEmpty()) {
-        System.out.print("\nValid Extractors: None.");
-      } else {
-        System.out.print("\nValid Extractors: " + extractors.size());
-        for (org.apache.any23.extractor.Extractor<?> extractor : extractors) {
-          System.out.print("\n   " + extractor.getDescription().getExtractorName());
-          //try {
-          //  System.out.print("\n      label:" + extractor.getDescription().getExtractorLabel());
-          //} catch (NullPointerException e) {
-          //  System.out.print("\n      label: null" + e.getStackTrace());
-          //}
-          //Prefixes prefixes = extractor.getDescription().getPrefixes();
-        }
-      }
-
-      ValidationReport vReport = eReport.getValidationReport();
-      List<ValidationReport.Error> errors = vReport.getErrors();
-      if (errors.isEmpty()) {
-        System.out.print("\nValidation Errors: 0");
-      } else {
-        System.out.print("\nValidation Errors: " + errors.size());
-        for (org.apache.any23.validator.ValidationReport.Error error : errors) {
-          System.out.print(error.getMessage());
-        }
-      }
-      System.out.println("\n=== END REPORT ===");
+      eReport = runner.extract(extractionParameters, source, handler);
     } catch (ExtractionException e) {
       e.printStackTrace();
     } finally {
       handler.close();
     }
+
+    generateReport(eReport);
+
     String out = baos.toString("UTF-8");
     try {
       BufferedWriter bf = new BufferedWriter(new FileWriter("construct.txt"));
@@ -127,4 +98,39 @@ public class ConstructJob {
     }
   }
 
+  private static void generateReport(ExtractionReport eReport) {
+    System.out.println("=== REPORT ===");
+    System.out.print("Detected MIMEType: " + eReport.getDetectedMimeType());
+    System.out.print("\nDetected Encoding: " + eReport.getEncoding());
+    //System.out.print("Detected Encoding: " + eReport.getExtractorIssues(extractorName));
+    @SuppressWarnings("rawtypes")
+    List<Extractor> extractors = eReport.getMatchingExtractors();
+    
+    if (extractors.isEmpty()) {
+      System.out.print("\nValid Extractors: None.");
+    } else {
+      System.out.print("\nValid Extractors: " + extractors.size());
+      for (org.apache.any23.extractor.Extractor<?> extractor : extractors) {
+        System.out.print("\n   " + extractor.getDescription().getExtractorName());
+        //try {
+        //  System.out.print("\n      label:" + extractor.getDescription().getExtractorLabel());
+        //} catch (NullPointerException e) {
+        //  System.out.print("\n      label: null" + e.getStackTrace());
+        //}
+        //Prefixes prefixes = extractor.getDescription().getPrefixes();
+      }
+    }
+
+    ValidationReport vReport = eReport.getValidationReport();
+    List<ValidationReport.Error> errors = vReport.getErrors();
+    if (errors.isEmpty()) {
+      System.out.print("\nValidation Errors: 0");
+    } else {
+      System.out.print("\nValidation Errors: " + errors.size());
+      for (org.apache.any23.validator.ValidationReport.Error error : errors) {
+        System.out.print(error.getMessage());
+      }
+    }
+    System.out.println("\n=== END REPORT ===");
+  }
 }
