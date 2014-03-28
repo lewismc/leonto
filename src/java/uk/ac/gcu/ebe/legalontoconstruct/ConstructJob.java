@@ -98,7 +98,7 @@ public class ConstructJob {
     }
   }
 
-  private static void generateReport(ExtractionReport eReport) {
+  public static void generateReport(ExtractionReport eReport) {
     System.out.println("=== REPORT ===");
     System.out.print("Detected MIMEType: " + eReport.getDetectedMimeType());
     System.out.print("\nDetected Encoding: " + eReport.getEncoding());
