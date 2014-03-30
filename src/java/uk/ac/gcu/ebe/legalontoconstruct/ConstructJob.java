@@ -22,15 +22,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
-
 import org.apache.any23.Any23;
-import org.apache.any23.ExtractionReport;
 import org.apache.any23.extractor.ExtractionException;
 import org.apache.any23.extractor.ExtractionParameters;
-import org.apache.any23.extractor.Extractor;
 import org.apache.any23.source.DocumentSource;
-import org.apache.any23.validator.ValidationReport;
+import org.apache.any23.writer.BenchmarkTripleHandler;
 import org.apache.any23.writer.JSONWriter;
 import org.apache.any23.writer.TripleHandler;
 import org.apache.any23.writer.TripleHandlerException;
@@ -73,19 +69,26 @@ public class ConstructJob {
     DocumentSource source = runner.createDocumentSource("file:" + fileURIString);
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     TripleHandler handler = new JSONWriter(baos);
+    BenchmarkTripleHandler bHandler = new BenchmarkTripleHandler(handler);
     ExtractionParameters extractionParameters = ExtractionParameters.newDefault();
     extractionParameters.setFlag("any23.extraction.head.meta", true);
-    ExtractionReport eReport = null;
     try {
       System.out.println("Starting Leonto extraction... ");
-      eReport = runner.extract(extractionParameters, source, handler);
+      System.out.println("Stats: content type   --> " + source.getContentType());
+      System.out.println("Stats: document URI   --> " + source.getDocumentURI());
+      System.out.println("Stats: content length --> " + source.getContentLength());
+      //ExtractionReport eReport = runner.extract(extractionParameters, source, bHandler);
+      runner.extract(extractionParameters, source, bHandler);
     } catch (ExtractionException e) {
       e.printStackTrace();
     } finally {
       handler.close();
     }
 
-    generateReport(eReport);
+    System.out.println("\n=== REPORT ===");
+    System.out.print(bHandler.report());
+    System.out.println("\n\n=== END REPORT ===");
+    //generateReport(eReport);
 
     String out = baos.toString("UTF-8");
     try {
@@ -98,7 +101,8 @@ public class ConstructJob {
     }
   }
 
-  public static void generateReport(ExtractionReport eReport) {
+  // Reporting is undertaken by the call to BenchmarkTripleHandler#report()
+  /*private static void generateReport(ExtractionReport eReport) {
     System.out.println("=== REPORT ===");
     System.out.print("Detected MIMEType: " + eReport.getDetectedMimeType());
     System.out.print("\nDetected Encoding: " + eReport.getEncoding());
@@ -132,5 +136,5 @@ public class ConstructJob {
       }
     }
     System.out.println("\n=== END REPORT ===");
-  }
+  }*/
 }
